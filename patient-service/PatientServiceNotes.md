@@ -995,9 +995,222 @@ Always convert the key into the uppercase underscore version.
 > These environment variables ALWAYS take priority over your `application.properties`.
 
 ---
+Here is a **clean, structured, future-proof, student-friendly TIP** for your **Patient-Service Notes**, describing exactly how to build, configure, and use a gRPC client inside a Spring Boot microservice.
 
-If you want, I can also write
-**Tip 09: Best practices for Dockerizing Microservices** or
-**Tip 10: How to structure multi-service Docker Compose files**.
+I’ve written it in the same **aesthetic, emoji-rich, professional** style as your previous tips.
 
+You can paste this directly into your *PatientServiceNotes.md*.
 
+---
+
+# 🌟 **Tip 09 – Building a gRPC Client in Spring Boot (Patient-Service → Billing-Service)**
+
+This tip explains how to create a complete gRPC client inside **Patient-Service** to call **Billing-Service** over RPC. It covers every concept & line of code so that future-you can build new gRPC clients easily in any microservice.
+
+---
+
+## 🎯 **1. Learning Objective**
+
+By the end of this tip, you will know:
+
+* How to configure host/port dynamically using `@Value`
+* How to create a `ManagedChannel` to any gRPC server
+* What `ManagedChannelBuilder` does
+* How `usePlaintext()` works
+* What a *blocking stub* is
+* How to create & send a gRPC request
+* How Patient-Service used this client inside `savePatient()`
+* How to reuse this exact pattern for any future microservice-to-microservice RPC call
+
+---
+
+# 🏗️ **2. The Final gRPC Client (Full Code)**
+
+```java
+@Service
+public class BillingServiceGrpcClient
+{
+    private static final Logger log = LoggerFactory.getLogger(BillingServiceGrpcClient.class);
+    private final BillingServiceGrpc.BillingServiceBlockingStub blockingStub;
+
+    public BillingServiceGrpcClient(
+            @Value("${billing.service.address:localhost}") String serverAddress,
+            @Value("${billing.service.grpc.port:9001}") int serverPort)
+    {
+        log.info("Connecting to Billing Server GRPC server at {}:{}", serverAddress, serverPort);
+
+        ManagedChannel channel = ManagedChannelBuilder
+                .forAddress(serverAddress, serverPort)
+                .usePlaintext()   // No TLS → perfect for local dev & Docker internal networking
+                .build();
+
+        blockingStub = BillingServiceGrpc.newBlockingStub(channel);
+    }
+
+    public BillingResponse createBillingAccount(String patientId, String name, String email)
+    {
+        BillingRequest request = BillingRequest.newBuilder()
+                .setPatientId(patientId)
+                .setName(name)
+                .setEmail(email)
+                .build();
+
+        BillingResponse response = blockingStub.createBillingAccount(request);
+        log.info("Created Billing Account from billing service via GRPC: {}", response);
+        return response;
+    }
+}
+```
+
+---
+
+# 📦 **3. Line-by-Line Explanation (What Each Piece Does)**
+
+### **🔹 @Service**
+
+Marks this class as a Spring bean, allowing other services (e.g., `PatientService`) to inject it.
+
+---
+
+### **🔹 @Value("${billing.service.address:localhost}")**
+
+Spring expression meaning:
+
+* Try to read `billing.service.address` from config
+* If missing → default to `"localhost"`
+
+Same for port:
+
+```java
+@Value("${billing.service.grpc.port:9001}")
+```
+
+This makes your client environment-friendly:
+
+* **Local** → localhost
+* **Docker** → service name (`billing-service`)
+* **Kubernetes** → internal DNS (`billing-service.default.svc.cluster.local`)
+
+You only change values in `application.properties`, not code.
+
+---
+
+### **🔹 ManagedChannel & ManagedChannelBuilder**
+
+```java
+ManagedChannel channel = ManagedChannelBuilder
+        .forAddress(serverAddress, serverPort)
+        .usePlaintext()
+        .build();
+```
+
+A **ManagedChannel** is the gRPC client’s TCP/HTTP2 connection manager.
+
+It handles:
+
+* DNS resolution
+* Load balancing
+* Connection pooling
+* Retries
+* Serializing/deserializing messages
+
+#### Why `.usePlaintext()`?
+
+Because gRPC defaults to TLS.
+For local dev & Docker internal networks → plaintext is faster and simpler.
+
+Production would use `.useTransportSecurity()` with certificates.
+
+---
+
+### **🔹 The Blocking Stub**
+
+```java
+blockingStub = BillingServiceGrpc.newBlockingStub(channel);
+```
+
+The **blocking stub**:
+
+* Is auto-generated from the `.proto` file
+* Gives you strongly typed Java methods
+* Each call blocks the thread until a response arrives
+* Perfect for simple request-response RPCs
+
+Example:
+
+```java
+BillingResponse response = blockingStub.createBillingAccount(request);
+```
+
+It *feels* like a normal Java method call — but under the hood:
+
+1. Converts your request to Protobuf
+2. Sends over HTTP/2
+3. Waits for BillingService handler to process it
+4. Parses Protobuf response
+5. Returns it to your method
+
+---
+
+# 🔄 **4. How Patient-Service Used This Client in savePatient()**
+
+Inside:
+
+```java
+public Patient savePatient(Patient patient)
+```
+
+You:
+
+1. Saved the patient → generated a UUID
+2. Called:
+
+```java
+billingServiceGrpcClient.createBillingAccount(
+        saved.getId().toString(),
+        saved.getName(),
+        saved.getEmail()
+);
+```
+
+3. Billing-Service responded with:
+
+```
+accountId: "...uuid..."
+status: "Active Response"
+```
+
+This means your cross-service RPC workflow is now working perfectly.
+
+---
+
+# 🔧 **5. Reusing This Pattern for Any Future Microservice**
+
+To create a new gRPC client (e.g., Appointment-Service, Inventory-Service, Email-Service):
+
+1. Add the generated stubs (via proto)
+2. Create a similar `GrpcClient` class
+3. Inject host/port via `@Value`
+4. Build a channel
+5. Create a stub
+6. Wrap request/response methods
+
+This structure is reusable forever.
+
+---
+
+# 📘 **6. Final Summary (Mental Model for Future You)**
+
+**What this class really does:**
+
+* Reads host & port from configuration
+* Opens an HTTP/2 gRPC channel
+* Creates a blocking client proxy stub
+* Sends BillingRequest messages
+* Receives strongly typed BillingResponse messages
+* Allows Patient-Service to communicate with Billing-Service directly
+* Used inside `savePatient()` right after DB insertion
+
+**This is the standard gRPC client pattern for Spring microservices.**
+
+---

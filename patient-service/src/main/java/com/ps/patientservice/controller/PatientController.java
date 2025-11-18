@@ -3,6 +3,7 @@ package com.ps.patientservice.controller;
 import com.ps.patientservice.dto.PatientCreateDTO;
 import com.ps.patientservice.dto.PatientDTO;
 import com.ps.patientservice.dto.PatientUpdateGroup;
+import com.ps.patientservice.grpc.BillingServiceGrpcClient;
 import com.ps.patientservice.mapper.PatientMapper;
 import com.ps.patientservice.model.Patient;
 import com.ps.patientservice.service.PatientService;
@@ -28,6 +29,7 @@ import java.util.UUID;
 public class PatientController {
 
     private final PatientService patientService;
+
 
     public PatientController(PatientService patientService) {
         this.patientService = patientService;

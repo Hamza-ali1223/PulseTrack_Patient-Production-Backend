@@ -4,6 +4,7 @@ import com.ps.patientservice.dto.PatientCreateDTO;
 import com.ps.patientservice.dto.PatientDTO;
 import com.ps.patientservice.exception.EmailAreadyExistsException;
 import com.ps.patientservice.exception.PatientNotFoundException;
+import com.ps.patientservice.grpc.BillingServiceGrpcClient;
 import com.ps.patientservice.model.Patient;
 import com.ps.patientservice.repository.PatientRepository;
 import org.springframework.stereotype.Service;
@@ -16,9 +17,11 @@ public class PatientService
 {
 
     private final PatientRepository patientRepository;
+    private final BillingServiceGrpcClient billingServiceGrpcClient;
 
-    public PatientService(PatientRepository patientRepository) {
+    public PatientService(PatientRepository patientRepository, BillingServiceGrpcClient billingServiceGrpcClient) {
         this.patientRepository = patientRepository;
+        this.billingServiceGrpcClient = billingServiceGrpcClient;
     }
 
     public List<Patient> getAll()
@@ -37,7 +40,10 @@ public class PatientService
         {
             throw new EmailAreadyExistsException("A Patient with this Email: "+patient.getEmail()+" exists.");
         }
-        return patientRepository.save(patient);
+
+        Patient saved = patientRepository.save(patient);
+        billingServiceGrpcClient.createBillingAccount(saved.getId().toString(),saved.getName(),saved.getEmail());
+        return saved;
     }
 
     public Boolean deleteById(UUID id)
