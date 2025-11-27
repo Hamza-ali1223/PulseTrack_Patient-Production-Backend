@@ -5,6 +5,7 @@ import com.ps.patientservice.dto.PatientDTO;
 import com.ps.patientservice.exception.EmailAreadyExistsException;
 import com.ps.patientservice.exception.PatientNotFoundException;
 import com.ps.patientservice.grpc.BillingServiceGrpcClient;
+import com.ps.patientservice.kakfa.KafkaProducer;
 import com.ps.patientservice.model.Patient;
 import com.ps.patientservice.repository.PatientRepository;
 import org.springframework.stereotype.Service;
@@ -18,10 +19,12 @@ public class PatientService
 
     private final PatientRepository patientRepository;
     private final BillingServiceGrpcClient billingServiceGrpcClient;
+    private final KafkaProducer kafkaProducer;
 
-    public PatientService(PatientRepository patientRepository, BillingServiceGrpcClient billingServiceGrpcClient) {
+    public PatientService(PatientRepository patientRepository, BillingServiceGrpcClient billingServiceGrpcClient, KafkaProducer kafkaProducer) {
         this.patientRepository = patientRepository;
         this.billingServiceGrpcClient = billingServiceGrpcClient;
+        this.kafkaProducer = kafkaProducer;
     }
 
     public List<Patient> getAll()
@@ -42,7 +45,10 @@ public class PatientService
         }
 
         Patient saved = patientRepository.save(patient);
+        //Below our GRPC protobuf request to our BillingService
         billingServiceGrpcClient.createBillingAccount(saved.getId().toString(),saved.getName(),saved.getEmail());
+        //Calling Kafka Producer to send Patient Event
+        kafkaProducer.sendEvent(saved);
         return saved;
     }
 
