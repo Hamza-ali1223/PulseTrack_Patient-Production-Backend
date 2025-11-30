@@ -5,8 +5,7 @@ WORKDIR /app
 COPY pom.xml .
 ARG MAVEN_CONFIG=/root/.m2
 
-RUN mvn -B dependency:go-offline dependency:resolve-plugins
-
+RUN mvn -B dependency:go-offline
 
 COPY src ./src
 
@@ -17,8 +16,8 @@ FROM eclipse-temurin:21 AS runner
 
 WORKDIR /app
 
-COPY --from=builder /app/target/api-gateway-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=builder /app/target/auth-service-0.0.1-SNAPSHOT.jar app.jar
 
-EXPOSE 4004
+EXPOSE 4000
 
 ENTRYPOINT ["java", "-jar", "app.jar"]

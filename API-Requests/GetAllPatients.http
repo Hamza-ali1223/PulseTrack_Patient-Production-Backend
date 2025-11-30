@@ -1,4 +1,5 @@
 ### GET request to Fetch All Patients
 GET http://localhost:4004/api/patients
 
+
 ###

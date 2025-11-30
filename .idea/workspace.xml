@@ -5,16 +5,25 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6f261b5a-1d81-48c8-b0ef-f6698c657b8d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Kafka_Setup_Guide.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/analytics-services/Dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/analytics-services/src/main/java/com/ps/analyticsservices/KakfaConsumerService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/analytics-services/src/main/java/com/ps/analyticsservices/PatientEventDB.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/analytics-services/src/main/java/com/ps/analyticsservices/repository/PatientKafkaRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/analytics-services/src/main/proto/patient_event.proto" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api-gateway/ApiGatewayNotes.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api-gateway/Dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/patient-service/src/main/java/com/ps/patientservice/kakfa/KafkaProducer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/patient-service/src/main/proto/patient_event.proto" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/API-Requests/AuthRequests/CreateNewAccount.http" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/API-Requests/AuthRequests/LoginAccount.http" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api-gateway/src/main/java/com/ps/apigateway/config/SecurityConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api-gateway/src/main/java/com/ps/apigateway/security/JwtAuthenticationFilter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api-gateway/src/main/java/com/ps/apigateway/security/JwtUtil.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/AuthServiceNotes.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/ps/authservice/config/SecurityConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/ps/authservice/controller/AuthController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/ps/authservice/dto/LoginRequestDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/ps/authservice/dto/LoginResponseDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/ps/authservice/dto/SignUpDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/ps/authservice/exception/GlobalExceptionHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/ps/authservice/exception/UserExistsAlreadyException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/ps/authservice/model/User.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/ps/authservice/repository/UserRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/ps/authservice/service/AuthService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/ps/authservice/service/CustomUserDetailsService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/ps/authservice/service/JwtService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
@@ -22,9 +31,9 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/API-Requests/CreatePatient.http" beforeDir="false" afterPath="$PROJECT_DIR$/API-Requests/CreatePatient.http" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/API-Requests/GetAllPatients.http" beforeDir="false" afterPath="$PROJECT_DIR$/API-Requests/GetAllPatients.http" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/patient-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/patient-service/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/patient-service/src/main/java/com/ps/patientservice/service/PatientService.java" beforeDir="false" afterPath="$PROJECT_DIR$/patient-service/src/main/java/com/ps/patientservice/service/PatientService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/patient-service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/patient-service/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-gateway/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/api-gateway/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-gateway/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/api-gateway/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-gateway/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/api-gateway/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,23 +41,33 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="DarkyenusTimeTracker">
-    <option name="totalTimeSeconds" value="45247" />
+    <option name="totalTimeSeconds" value="63658" />
     <option name="gitIntegration" value="true" />
     <option name="naggedAbout" value="1" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Exception" />
-        <option value="HTTP Request" />
         <option value="Dockerfile" />
         <option value="Interface" />
+        <option value="Spring REST Controller" />
+        <option value="Spring Repository" />
+        <option value="Spring Service" />
+        <option value="Spring Configuration Properties" />
+        <option value="Exception" />
+        <option value="Spring Component" />
         <option value="Class" />
+        <option value="HTTP Request" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="jar://$MAVEN_REPOSITORY$/org/springframework/security/spring-security-core/7.0.0/spring-security-core-7.0.0-sources.jar!/org/springframework/security/authentication/AuthenticationManager.java" root0="SKIP_INSPECTION" />
+    <setting file="jar://$MAVEN_REPOSITORY$/org/springframework/security/spring-security-core/7.0.0/spring-security-core-7.0.0-sources.jar!/org/springframework/security/authentication/ProviderManager.java" root0="SKIP_INSPECTION" />
+    <setting file="jar://$MAVEN_REPOSITORY$/org/springframework/security/spring-security-core/7.0.0/spring-security-core-7.0.0-sources.jar!/org/springframework/security/authentication/dao/DaoAuthenticationProvider.java" root0="SKIP_INSPECTION" />
   </component>
   <component name="KubernetesApiPersistence">{}</component>
   <component name="KubernetesApiProvider">{
@@ -63,64 +82,70 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Docker.analytics-service.executor&quot;: &quot;Run&quot;,
-    &quot;Docker.api-gateway.executor&quot;: &quot;Run&quot;,
-    &quot;Docker.billing-service.executor&quot;: &quot;Run&quot;,
-    &quot;Docker.kafka-ui.executor&quot;: &quot;Run&quot;,
-    &quot;Docker.kakfa-kraft.executor&quot;: &quot;Run&quot;,
-    &quot;Docker.patient-service-db.executor&quot;: &quot;Run&quot;,
-    &quot;Docker.patient-service.executor&quot;: &quot;Run&quot;,
-    &quot;HTTP Request.CreatePatient | GET request to example server.executor&quot;: &quot;Run&quot;,
-    &quot;HTTP Request.CreatePatient | Post Update Request.executor&quot;: &quot;Run&quot;,
-    &quot;HTTP Request.GetAllPatients | GET request to Fetch All Patients.executor&quot;: &quot;Run&quot;,
-    &quot;HTTP Request.GetAllPatients | GET request to example server.executor&quot;: &quot;Run&quot;,
-    &quot;HTTP Request.UpdatePatient | Put Update Request.executor&quot;: &quot;Run&quot;,
-    &quot;HTTP Request.create-billing-account | Create Billing Account.executor&quot;: &quot;Run&quot;,
-    &quot;Maven.analytics-services [clean].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.analytics-services [compile].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.analytics-services [org.xolstice.maven.plugins:protobuf-maven-plugin:0.6.1:compile].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.billing-service [compile].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.patient-service [clean].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.patient-service [compile].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.patient-service [org.apache.maven.plugins:maven-clean-plugin:3.4.1:clean].executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;Notification.DisplayName-DoNotAsk-DatabaseConfigFileWatcher.found&quot;: &quot;Database connection parameters found&quot;,
-    &quot;Notification.DoNotAsk-DatabaseConfigFileWatcher.found&quot;: &quot;true&quot;,
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;SONARLINT_PRECOMMIT_ANALYSIS&quot;: &quot;true&quot;,
-    &quot;Spring Boot.BillingServiceApplication.executor&quot;: &quot;Debug&quot;,
-    &quot;Spring Boot.PatientServiceApplication.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;F:/Javac/Patient-Production-Backend/api-gateway&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;run.configurations.included.in.services&quot;: &quot;true&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Docker.analytics-service.executor": "Run",
+    "Docker.api-gateway.executor": "Run",
+    "Docker.auth-service.executor": "Run",
+    "Docker.billing-service.executor": "Run",
+    "Docker.kafka-ui.executor": "Run",
+    "Docker.kakfa-kraft.executor": "Run",
+    "Docker.patient-service-db.executor": "Run",
+    "Docker.patient-service.executor": "Run",
+    "HTTP Request.CreateNewAccount | Create New Account.executor": "Run",
+    "HTTP Request.CreatePatient | GET request to example server.executor": "Run",
+    "HTTP Request.CreatePatient | Post Update Request.executor": "Run",
+    "HTTP Request.GetAllPatients | GET request to Fetch All Patients.executor": "Run",
+    "HTTP Request.GetAllPatients | GET request to example server.executor": "Run",
+    "HTTP Request.LoginAccount | Create New Account.executor": "Run",
+    "HTTP Request.UpdatePatient | Put Update Request.executor": "Run",
+    "HTTP Request.create-billing-account | Create Billing Account.executor": "Run",
+    "Maven.analytics-services [clean].executor": "Run",
+    "Maven.analytics-services [compile].executor": "Run",
+    "Maven.analytics-services [org.xolstice.maven.plugins:protobuf-maven-plugin:0.6.1:compile].executor": "Run",
+    "Maven.api-gateway [clean].executor": "Run",
+    "Maven.billing-service [compile].executor": "Run",
+    "Maven.patient-service [clean].executor": "Run",
+    "Maven.patient-service [compile].executor": "Run",
+    "Maven.patient-service [org.apache.maven.plugins:maven-clean-plugin:3.4.1:clean].executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Notification.DisplayName-DoNotAsk-DatabaseConfigFileWatcher.found": "Database connection parameters found",
+    "Notification.DoNotAsk-DatabaseConfigFileWatcher.found": "true",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "SONARLINT_PRECOMMIT_ANALYSIS": "true",
+    "Spring Boot.AuthServiceApplication.executor": "Run",
+    "Spring Boot.BillingServiceApplication.executor": "Debug",
+    "Spring Boot.PatientServiceApplication.executor": "Run",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "F:/Javac/Patient-Production-Backend/auth-service",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "run.configurations.included.in.services": "true",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;postgresql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "postgresql"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="F:\Javac\Patient-Production-Backend\auth-service" />
       <recent name="F:\Javac\Patient-Production-Backend\api-gateway" />
       <recent name="F:\Javac\Patient-Production-Backend\analytics-services" />
       <recent name="F:\Javac\Patient-Production-Backend\analytics-services\src\main\java\proto" />
@@ -141,16 +166,19 @@
     </option>
   </component>
   <component name="RunManager" selected="Docker.api-gateway">
+    <configuration name="CreateNewAccount | Create New Account" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/API-Requests/AuthRequests/CreateNewAccount.http" executionIdentifier="Create New Account" runType="Run single request">
+      <method v="2" />
+    </configuration>
     <configuration name="CreatePatient | Post Update Request" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/API-Requests/CreatePatient.http" executionIdentifier="Post Update Request" runType="Run single request">
       <method v="2" />
     </configuration>
     <configuration name="GetAllPatients | GET request to Fetch All Patients" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/API-Requests/GetAllPatients.http" executionIdentifier="GET request to Fetch All Patients" runType="Run single request">
       <method v="2" />
     </configuration>
-    <configuration name="UpdatePatient | Put Update Request" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/API-Requests/UpdatePatient.http" executionIdentifier="Put Update Request" runType="Run single request">
+    <configuration name="LoginAccount | Create New Account" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/API-Requests/AuthRequests/LoginAccount.http" executionIdentifier="Create New Account" runType="Run single request">
       <method v="2" />
     </configuration>
-    <configuration name="create-billing-account | Create Billing Account" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/GRPC-Requests/billing-service/create-billing-account.http" executionIdentifier="Create Billing Account" runType="Run single request">
+    <configuration name="UpdatePatient | Put Update Request" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/API-Requests/UpdatePatient.http" executionIdentifier="Put Update Request" runType="Run single request">
       <method v="2" />
     </configuration>
     <configuration name="AnalyticsServicesApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
@@ -163,6 +191,13 @@
     <configuration name="ApiGatewayApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="api-gateway" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.ps.apigateway.ApiGatewayApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="AuthServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="auth-service" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.ps.authservice.AuthServiceApplication" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -236,6 +271,49 @@
           </option>
           <option name="commandLineOptions" value="--network internal" />
           <option name="sourceFilePath" value="api-gateway/Dockerfile" />
+          <option name="volumeBindings">
+            <list>
+              <DockerVolumeBindingImpl>
+                <option name="containerPath" value="/root/.m2" />
+                <option name="hostPath" value="C:\Users\Admin\.m2" />
+              </DockerVolumeBindingImpl>
+            </list>
+          </option>
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <configuration name="auth-service" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
+      <deployment type="dockerfile">
+        <settings>
+          <option name="imageTag" value="auth-service:latest" />
+          <option name="containerName" value="auth-service" />
+          <option name="envVars">
+            <list>
+              <DockerEnvVarImpl>
+                <option name="name" value="SPRING_DATASOURCE_PASSWORD" />
+                <option name="value" value="root" />
+              </DockerEnvVarImpl>
+              <DockerEnvVarImpl>
+                <option name="name" value="SPRING_DATASOURCE_URL" />
+                <option name="value" value="jdbc:postgresql://patient-service-db:5432/patient-db" />
+              </DockerEnvVarImpl>
+              <DockerEnvVarImpl>
+                <option name="name" value="SPRING_DATASOURCE_USERNAME" />
+                <option name="value" value="root" />
+              </DockerEnvVarImpl>
+            </list>
+          </option>
+          <option name="portBindings">
+            <list>
+              <DockerPortBindingImpl>
+                <option name="containerPort" value="4005" />
+                <option name="hostPort" value="4005" />
+              </DockerPortBindingImpl>
+            </list>
+          </option>
+          <option name="commandLineOptions" value="--network internal" />
+          <option name="sourceFilePath" value="auth-service/Dockerfile" />
           <option name="volumeBindings">
             <list>
               <DockerVolumeBindingImpl>
@@ -493,6 +571,7 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Docker.auth-service" />
       <item itemvalue="Docker.api-gateway" />
       <item itemvalue="Docker.analytics-service" />
       <item itemvalue="Docker.kafka-ui" />
@@ -500,10 +579,12 @@
       <item itemvalue="Docker.billing-service" />
       <item itemvalue="Docker.patient-service-db" />
       <item itemvalue="Docker.patient-service" />
-      <item itemvalue="HTTP Request.create-billing-account | Create Billing Account" />
+      <item itemvalue="HTTP Request.CreateNewAccount | Create New Account" />
+      <item itemvalue="HTTP Request.LoginAccount | Create New Account" />
       <item itemvalue="HTTP Request.CreatePatient | Post Update Request" />
       <item itemvalue="HTTP Request.GetAllPatients | GET request to Fetch All Patients" />
       <item itemvalue="HTTP Request.UpdatePatient | Put Update Request" />
+      <item itemvalue="Spring Boot.AuthServiceApplication" />
       <item itemvalue="Spring Boot.ApiGatewayApplication" />
       <item itemvalue="Spring Boot.AnalyticsServicesApplication" />
       <item itemvalue="Spring Boot.BillingServiceApplication" />
@@ -511,10 +592,11 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="HTTP Request.GetAllPatients | GET request to Fetch All Patients" />
         <item itemvalue="HTTP Request.CreatePatient | Post Update Request" />
+        <item itemvalue="HTTP Request.GetAllPatients | GET request to Fetch All Patients" />
+        <item itemvalue="HTTP Request.LoginAccount | Create New Account" />
+        <item itemvalue="HTTP Request.CreateNewAccount | Create New Account" />
         <item itemvalue="HTTP Request.UpdatePatient | Put Update Request" />
-        <item itemvalue="HTTP Request.create-billing-account | Create Billing Account" />
       </list>
     </recent_temporary>
   </component>
@@ -541,7 +623,14 @@
       <workItem from="1763800077532" duration="4893000" />
       <workItem from="1764147077741" duration="882000" />
       <workItem from="1764148028586" duration="3712000" />
-      <workItem from="1764264282985" duration="656000" />
+      <workItem from="1764264282985" duration="3647000" />
+      <workItem from="1764322293528" duration="4484000" />
+      <workItem from="1764427848493" duration="5877000" />
+      <workItem from="1764441170081" duration="6967000" />
+      <workItem from="1764454703687" duration="595000" />
+      <workItem from="1764455365558" duration="522000" />
+      <workItem from="1764524222760" duration="115000" />
+      <workItem from="1764524373327" duration="8740000" />
     </task>
     <task id="LOCAL-00001" summary="feat: optimize Docker build performance, correct DB configuration, and improve env overrides&#10;&#10;- Added Maven cache optimization via host-mounted `.m2` directory to avoid repeated dependency downloads&#10;- Introduced `ARG MAVEN_CONFIG=/root/.m2` to ensure Maven stores repo in the correct mounted path&#10;- Updated Dockerfile layering (COPY pom.xml first + go-offline + COPY src) for improved caching&#10;- Ensured multi-service reusability of the same `.m2` cache across microservices&#10;- Fixed fallback to H2 by documenting correct Spring Boot env variable names (`SPRING_DATASOURCE_*`)&#10;- Clarified behavior of `spring.sql.init.mode` and its impact on schema recreation&#10;- Improved environment config for PostgreSQL and clarified why H2 was being selected automatically&#10;- Documented issue root causes, failed attempts, and final working solution for future reference">
       <option name="closed" value="true" />
@@ -581,6 +670,11 @@
           <url>file://$PROJECT_DIR$/billing-service/target/generated-sources/protobuf/grpc-java/billing/BillingServiceGrpc.java</url>
           <line>129</line>
           <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/auth-service/src/main/java/com/ps/authservice/controller/AuthController.java</url>
+          <line>33</line>
+          <option name="timeStamp" value="11" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

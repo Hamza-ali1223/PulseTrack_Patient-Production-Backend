@@ -1,0 +1,10 @@
+### Create New Account
+POST  http://localhost:4004/auth/signup
+Content-Type: application/json
+
+{
+  "email": "tenacioushamza@gmail.com",
+  "username": "Hamza Ali",
+  "password": "12345678",
+  "role": "USER"
+}
