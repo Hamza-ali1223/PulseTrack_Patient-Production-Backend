@@ -1,5 +1,5 @@
 ### GET request to Fetch All Patients
-GET http://localhost:4004/api/patients
-
+GET http://lb-06bcba2e.elb.localhost.localstack.cloud:4004/api/patients
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZW5hY2lvdXNoYW16YUBnbWFpbC5jb20iLCJpYXQiOjE3NjUyMDc5MzYsImV4cCI6MTc2NTIxMTUzNiwicm9sZSI6IlVTRVIifQ.T6wAOsnft_OxvE4udk7FAT4CKktjWSJ9fDGOT1bKSyY
 
 ###

@@ -19,6 +19,7 @@
         <module name="analytics-services" />
         <module name="api-gateway" />
         <module name="auth-service" />
+        <module name="infrastructure" />
         <module name="billing-service" />
       </profile>
     </annotationProcessing>

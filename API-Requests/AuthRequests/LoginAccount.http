@@ -1,5 +1,5 @@
-### Create New Account
-POST  http://localhost:4004/auth/login
+### Login
+POST  http://lb-befb12e7.elb.localhost.localstack.cloud:4004/auth/login
 Content-Type: application/json
 
 {

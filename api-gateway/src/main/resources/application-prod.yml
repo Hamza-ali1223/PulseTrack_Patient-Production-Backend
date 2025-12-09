@@ -1,0 +1,52 @@
+server:
+  port: 4004
+
+spring:
+  application:
+    name: api-gateway
+
+  main:
+    web-application-type: reactive
+
+  cloud:
+    gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+
+      routes:
+        # ==========================
+        # AUTH-SERVICE (public)
+        # ==========================
+        - id: auth-service-route
+          uri: http://host.docker.internal:4005
+          predicates:
+            - Path=/auth/**
+          filters:
+            - StripPrefix=0
+
+        # ==========================
+        # PATIENT-SERVICE (protected)
+        # ==========================
+        - id: patient-service-route
+          uri: http://host.docker.internal:4000
+          predicates:
+            - Path=/api/patients/**
+          filters:
+            - StripPrefix=1
+
+        # ==========================
+        # PATIENT-SERVICE OPENAPI DOCS
+        # ==========================
+        - id: api-docs-patient-route
+          uri: http://host.docker.internal:4000
+          predicates:
+            - Path=/api-docs/patients
+          filters:
+            - RewritePath=/api-docs/patients,/v3/api-docs
+
+jwt:
+  secret: 2c46a678a7da9f4049225be3970c3d367370617004b49cb70195422aa7eb4131
+
+logging:
+  level:
+    root: debug
