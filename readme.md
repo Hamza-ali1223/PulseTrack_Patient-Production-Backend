@@ -82,7 +82,7 @@ Along with main services, Other important components are:
 
 
 ```mermaid
-%%{init: {'theme': 'light'}}%%
+%%{init: {'theme':'default'}}%%
 flowchart TB
   root(["Patient-Production-Backend"])
 
