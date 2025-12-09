@@ -249,3 +249,225 @@ flowchart TB
   root --> gateway
   root --> infra
 ```
+# Architectural Diagram:
+
+```mermaid
+%%{init: {'theme':'forest'}}%%
+flowchart LR
+
+  %% ========= STYLES ========= %%
+  classDef svc   fill:#1f2933,stroke:#9ca3af,color:#f9fafb;
+  classDef infra fill:#111827,stroke:#6b7280,color:#e5e7eb;
+  classDef db    fill:#065f46,stroke:#6ee7b7,color:#f9fafb;
+  classDef mq    fill:#7c2d12,stroke:#fdba74,color:#f9fafb;
+  classDef ext   stroke-dasharray:3 3,stroke:#9ca3af;
+
+  %% ========= CLIENT ========= %%
+  User[[API Client / Tester]]
+
+  %% ========= LOCALSTACK / AWS LAYER ========= %%
+  subgraph LS["LocalStack Pro (AWS Emulation)"]
+    subgraph VPC["VPC: PatientManagementVPC"]
+      
+      ALB["Application Load Balancer\n(HTTP entrypoint :4004)"]:::infra
+      
+      subgraph ECS["ECS Fargate Cluster\nPatientManagementCluster"]
+        APIGW["API Gateway\n(Spring Cloud Gateway)"]:::svc
+        AUTH["Auth Service"]:::svc
+        PATIENT["Patient Service"]:::svc
+        BILLING["Billing Service"]:::svc
+        ANALYTICS["Analytics Service"]:::svc
+      end
+
+    end
+  end
+
+  %% ========= EXTERNAL DOCKER SERVICES ========= %%
+  subgraph Docker["External Docker Services (same host)"]
+    DB[(Postgres DB\npatient-db)]:::db
+    KAFKA[(Kafka Broker\nKRaft single-node)]:::mq
+  end
+  class Docker ext;
+
+  %% ========= FLOWS ========= %%
+
+  %% Client → Gateway → Services
+  User -->|HTTP /auth, /api/*| ALB --> APIGW
+  APIGW -->|/auth/**| AUTH
+  APIGW -->|/api/patients/**| PATIENT
+
+  %% Service-to-service
+  PATIENT -->|gRPC\nBillingService| BILLING
+  PATIENT -->|Kafka PatientEvent\nproducer| KAFKA
+  ANALYTICS -->|Kafka PatientEvent\nconsumer| KAFKA
+
+  %% Persistence (shared Postgres for this project)
+  AUTH -->|JPA\njdbc:postgresql://host.docker.internal:5432/patient-db| DB
+  PATIENT -->|JPA\nsame DB| DB
+  BILLING -->|JPA\nsame DB| DB
+  ANALYTICS -->|JPA\nsame DB| DB
+
+```
+
+# Insights on What i learned:
+## 1. Designing production-ready API Gateway and Auth Boundary:
+- I learned how to separate the Auth-service responsibilities. In simple monolith, authentication happens in this manner of generating and validating Tokens. I separated these concerns, keeping jwt generation responsibility in Auth-Service and validation in api-gateway
+- I debugged tricky routes configuration. Initially it was supposed to be Spring.Cloud.Gateway but since last cloud gateway versions. The Project has been shifted to Webflux. This Caused issues during development workflow.
+
+**Reference:** ApiGatewayNotes.md in ApiGateway Module
+## 2. Building resilient, Observable Kafka pipelines using Kraft:
+- I encounted this issue during working, that kafka now runs without seperate manager in simple terms. There is no more Zookeeper the controller and broker nodes is same. Hence , the Kafka-kraft mode.
+- I also added Observability on Kafka. While My Kafka-kraft container ran on port 9092, i also ran another container on port 8000. This was Kafka-ui container. It is a docker image
+- Utililzed the Proto format to send Protobuf events. The reason that it is more compact as compared to other transferrable formats.
+  **Reference: ** Kafka_Setup_Guides.md in root folder forget to put in analytices service
+## 3. Getting gRPC right between Patient and Billing Service:
+- Okay, so this is quite interesting. I implemented gRPC Communication and learned it's importance, how it works, why and how it is used.
+- Truly, one heck of a great technology for doing service to service communication.
+  **Reference: ** BillingServicesNotes.md
+
+## 4 . Evolving a clean, validated domain Modal for Patient Service:
+- Implemented DTOs and not only that made a mapper class that had static methods that perform conversions from DTOs to model and vice versa.
+- Implemented Validation and with it also implemented GlobalExceptionHandler so that i can manipulate response and send only required error information back if a error occurs or post request body is incorrect.
+  **Reference: ** PatientServiceNotes.md
+
+### Deep-Dive Notes and How to Find Them
+
+If you want to see the raw troubleshooting, design decisions, and “why” behind this project, you can read my detailed notes for each part of the system:
+
+- **Patient Service Notes**  
+  Covers DTO → Entity mapping strategy, validation, `@ControllerAdvice` for clean error responses, IntelliJ module-root fixes, and UUID + `data.sql` pitfalls.  
+  _Location:_ `patientservice-module/PatientServiceNotes.md`
+
+- **Billing Service (gRPC) Notes**  
+  Explains how I wired Spring Boot with gRPC, configured the Protobuf Maven plugin, handled generated stubs, and fixed “unimplemented method” / stub desync issues.  
+  _Location:_ `billingservice-module/BillingServiceNotes.md`
+
+- **Auth Service Notes**  
+  Documents signup/login flows, JWT generation (claims, subject, expiry), and how the auth service is kept focused on issuing tokens rather than handling authorization logic in every service.  
+  _Location:_ `authservice-module/AuthServiceNotes.md`
+
+- **API Gateway & Security Notes**  
+  Deep dive into Spring Cloud Gateway + WebFlux security, JWT validation in the gateway, route configuration, and debugging misconfigured YAML that caused 404s for every request.  
+  _Location:_ `apigateway-module/ApiGatewayNotes.md`
+
+- **Kafka & Analytics Pipeline Notes**  
+  Explains the Kafka KRaft single-node setup (internal vs external listeners), Docker networking, topic configuration, and how the patient → billing → Kafka → analytics event flow is wired.
+  _Location:_ `root/Kafka_Setup_Guide.md`
+
+These notes are meant as an “engineering journal” for anyone who wants to understand not just **what** I built, but **how I debugged and reasoned** about each part of the system.
+
+# Load Testing:
+
+Now, In the transition of Development to Deployment. There is a very crucial phase that validates our system and ensure our system is working as needed.
+Testing is a core backbone of software development and since i am actively trying to diversify and improve my skills. I decided to also test my deployed backend and measure it's performance.
+
+### What i did:
+So, i vibe coded a java program that uses ExecutorService and Future to send multiple requests on four urls which are as follows:
+- Create new User
+- Login User
+- Create Patient
+- Get All Patient
+
+This program then yeiled important information and printed the results, finding the percentiles p25, p50, p95 and p99 which showcase my setup's capacity to Handle the test.
+
+### Reason to not use Postman, Apache JMeter,and other API testing tool:
+
+I decided to went with my own Testing Program so i can have results in the order fashion i want, and much more then that have a thorough understanding of my testing methodology.
+JMeter would have given alot of information which makes it hard to understand the results ╯︿╰.
+Postman yeilds less information and that is why it was not favourable.
+
+
+### Testing Program Explained:
+
+At first, I wrote a simple sequential tester, but very quickly I realised that real systems are almost never hit one request at a time. So I evolved it into a concurrent load script written in plain Java using `HttpClient`, `ExecutorService` and `Future`.
+If you want to see the test for yourself, go to this location ```infrastructure/src/main/java/com/ps/test/PatientLoadScript.java```
+
+
+The script follows this high-level flow:
+
+1. **Signup phase**
+  - Creates 2 user accounts via `/auth/signup`.
+  - Even if the users already exist and return `4xx`, the script still records timing and status so I can see the behaviour.
+
+2. **Login phase**
+  - Logs in both users via `/auth/login`.
+  - Extracts the JWT token from the first login response and uses it as `Authorization: Bearer <token>` for all protected endpoints.
+
+3. **Create Patient phase (concurrent)**
+  - Sends `CREATE_PATIENT_REQUESTS` `POST /api/patients` calls.
+  - Uses a configurable thread pool (`CREATE_PATIENT_CONCURRENCY`) to fire requests in parallel.
+  - Each request measures its own latency and reports success/4xx/5xx, plus goes into a shared list for percentile calculations.
+
+4. **Get All Patients phase (concurrent)**
+  - Sends `GET_ALL_PATIENTS_REQUESTS` `GET /api/patients` calls.
+  - Uses another configurable thread pool (`GET_ALL_PATIENTS_CONCURRENCY`) for concurrent reads.
+  - Again, every call is timed and aggregated.
+
+At the end, the program prints a **clean summary per phase** (SIGNUP, LOGIN, CREATE PATIENT, GET ALL PATIENTS) including:
+
+- Total requests
+- How many were OK / 4xx / 5xx / other
+- Average latency
+- Percentiles (p50, p95, etc.)
+- Max latency
+
+So instead of a noisy wall of logs, I get a focused “mini-report” per run that tells me how the system behaves under different levels of concurrency.
+
+
+### Findings (High-Level):
+
+To keep things real, all tests were run on my **local development machine**:
+
+- **CPU:** Intel i5-6200U (2 cores / 4 threads, 2.0 GHz)
+- **RAM:** 16 GB DDR4
+- **Environment:**
+  - All microservices running as **ECS Fargate tasks inside LocalStack Pro**
+  - **Kafka** running as a separate Docker container (KRaft mode)
+  - **PostgreSQL** running as a separate Docker container (single DB used by services)
+  - Traffic always goes through the **API Gateway**, where JWT is validated before forwarding to the underlying service
+- **Per “Create Patient” request, the system does:**
+  - REST call to **patient-service**
+  - **DB write** to PostgreSQL
+  - **gRPC** call to billing-service
+  - **Kafka event** published to analytics-service
+
+#### Different Load Scenarios I Tested
+
+- **Scenario 1: Moderate concurrency, heavier volume**
+  - `CREATE_PATIENT_REQUESTS = 500`, `GET_ALL_PATIENTS_REQUESTS = 1000`
+  - `CREATE_PATIENT_CONCURRENCY = 10`, `GET_ALL_PATIENTS_CONCURRENCY = 20`
+  - Result: All requests succeeded (no 5xx).
+    - Create avg ≈ **800–900 ms**
+    - Get-all avg ≈ **1.3 s**
+  - System stayed stable and predictable at this level.
+
+- **Scenario 2: Higher concurrency, smaller volume**
+  - `CREATE_PATIENT_REQUESTS = 200`, `GET_ALL_PATIENTS_REQUESTS = 400`
+  - `CREATE_PATIENT_CONCURRENCY = 20`, `GET_ALL_PATIENTS_CONCURRENCY = 40`
+  - Result: Still **0 errors**, but latency went up.
+    - Create avg ≈ **1.6 s**
+    - Get-all avg ≈ **1.6–1.7 s**
+  - Good signal that the system can handle bursts, with some cost in response time.
+
+- **Scenario 3: Aggressive concurrency (starting to hit limits)**
+  - `CREATE_PATIENT_REQUESTS = 400`, `GET_ALL_PATIENTS_REQUESTS = 600`
+  - `CREATE_PATIENT_CONCURRENCY = 100`, `GET_ALL_PATIENTS_CONCURRENCY = 120`
+  - Result: First signs of real **strain**.
+    - 5× `500 Internal Server Error` responses during create phase
+    - Create avg ≈ **4.1 s**, p95 and max spiking **> 10 s**
+    - Get-all avg ≈ **6.2 s**, also with very high tail latencies
+  - This tells me that around this concurrency level, my local setup (CPU, I/O, LocalStack overhead) is getting saturated.
+
+In short: on my laptop, this system can comfortably handle **moderate concurrency** with clean success rates, and even under more aggressive parallel load it continues to function, though with slower responses and a few 500s when pushed too hard. This is exactly the kind of signal I wanted before calling the setup “production-style” from a learning point of view.
+
+
+# Future Vision:
+
+This was a great learning opportunity, but we are not stopping here ╰(*°▽°*)╯.
+In future, i'll improve this project by adding many more things. Few of them are:
+- Advanced Api Design & Pagination
+- ofc, will use and implement redis cache
+- rate limiting and other resilience features
+- Observability and Monitoring via Grafana and Prometheus
+
+> So yes, keep looking forward to it and also you can email me at tenacioushamza@gmail.com if you have suggestions for further adding something in it, would appreciate all suggestions alot.
