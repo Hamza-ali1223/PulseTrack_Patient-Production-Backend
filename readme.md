@@ -319,16 +319,19 @@ flowchart LR
 - I encounted this issue during working, that kafka now runs without seperate manager in simple terms. There is no more Zookeeper the controller and broker nodes is same. Hence , the Kafka-kraft mode.
 - I also added Observability on Kafka. While My Kafka-kraft container ran on port 9092, i also ran another container on port 8000. This was Kafka-ui container. It is a docker image
 - Utililzed the Proto format to send Protobuf events. The reason that it is more compact as compared to other transferrable formats.
-  **Reference: ** Kafka_Setup_Guides.md in root folder forget to put in analytices service
+
+  **Reference:** Kafka_Setup_Guides.md in root folder forget to put in analytices service
 ## 3. Getting gRPC right between Patient and Billing Service:
 - Okay, so this is quite interesting. I implemented gRPC Communication and learned it's importance, how it works, why and how it is used.
 - Truly, one heck of a great technology for doing service to service communication.
-  **Reference: ** BillingServicesNotes.md
+
+  **Reference:** BillingServicesNotes.md
 
 ## 4 . Evolving a clean, validated domain Modal for Patient Service:
 - Implemented DTOs and not only that made a mapper class that had static methods that perform conversions from DTOs to model and vice versa.
 - Implemented Validation and with it also implemented GlobalExceptionHandler so that i can manipulate response and send only required error information back if a error occurs or post request body is incorrect.
-  **Reference: ** PatientServiceNotes.md
+  
+  **Reference:** PatientServiceNotes.md
 
 ### Deep-Dive Notes and How to Find Them
 
